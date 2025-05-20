@@ -1,9 +1,8 @@
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
-
-export default function HomeScreen() {
+export default function TabTwoScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Home</Text>
+      <Text>Settings</Text>
     </SafeAreaView>
   );
 }
