@@ -1,4 +1,6 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
+import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import { useEffect, useState } from 'react';
 import {
@@ -9,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const getColorEmoji = (r: number, g: number, b: number) => {
   // Calculate color temperature
@@ -133,10 +136,33 @@ export default function HomeScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
+  const handleCopyColor = async () => {
+    try {
+      await Clipboard.setStringAsync(backgroundColor);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      Toast.show({
+        type: 'success',
+        text1: 'Color copied',
+        text2: backgroundColor,
+        position: 'bottom',
+        visibilityTime: 2000,
+      });
+    } catch (error) {
+      console.log('Error copying to clipboard:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Error copying color',
+        position: 'bottom',
+        visibilityTime: 2000,
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
       <View style={styles.content}>
         <Text style={styles.emoji}>{currentEmoji}</Text>
+
         <Animated.View
           style={[
             styles.buttonContainer,
@@ -147,14 +173,29 @@ export default function HomeScreen() {
           ]}
         >
           <Pressable
-            android_disableSound
             style={styles.button}
             onPress={handleColorChange}
+            android_disableSound
           >
             <Text style={styles.buttonText}>Change Color</Text>
           </Pressable>
         </Animated.View>
+
+        <View style={styles.colorContainer}>
+          <Text style={styles.colorText}>{backgroundColor}</Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.copyButton,
+              pressed && styles.copyButtonPressed,
+            ]}
+            onPress={handleCopyColor}
+            android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+          >
+            <MaterialIcons name='content-copy' size={24} color='#000' />
+          </Pressable>
+        </View>
       </View>
+      <Toast />
     </SafeAreaView>
   );
 }
@@ -171,6 +212,28 @@ const styles = StyleSheet.create({
   },
   emoji: {
     fontSize: 80,
+  },
+  colorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginBottom: 10,
+    gap: 8,
+  },
+  colorText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#000',
+  },
+  copyButton: {
+    padding: 4,
+    borderRadius: 4,
+  },
+  copyButtonPressed: {
+    opacity: 0.8,
   },
   buttonContainer: {
     borderRadius: 8,
