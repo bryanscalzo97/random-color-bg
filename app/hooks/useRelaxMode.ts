@@ -10,29 +10,25 @@ export function useRelaxMode(onColorChange: () => void) {
     setProgress(0);
   };
 
-  const handleColorChange = () => {
-    onColorChange();
-    resetTimer();
-  };
-
   useEffect(() => {
     if (!isActive) {
       setProgress(0);
       return;
     }
 
-    const progressInterval = setInterval(() => {
+    const interval = setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current;
       const newProgress = Math.min(elapsed / 5000, 1);
       setProgress(newProgress);
 
       if (newProgress >= 1) {
-        handleColorChange();
+        onColorChange();
+        resetTimer();
       }
     }, 16);
 
-    return () => clearInterval(progressInterval);
-  }, [isActive]);
+    return () => clearInterval(interval);
+  }, [isActive, onColorChange]);
 
   return {
     isActive,
