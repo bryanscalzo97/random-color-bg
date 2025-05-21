@@ -2,38 +2,12 @@ import * as Haptics from 'expo-haptics';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { ColorDisplay } from './components/ColorDisplay';
+import { ProgressBar } from './components/ProgressBar';
+import { RelaxModeSwitch } from './components/RelaxModeSwitch';
 import { useAudio } from './hooks/useAudio';
 import { useClipboard } from './hooks/useClipboard';
 import { useColorManager } from './hooks/useColorManager';
-
-const getColorEmoji = (r: number, g: number, b: number) => {
-  // Calculate color temperature
-  // Warm colors have more red and yellow
-  // Cold colors have more blue
-  const isWarm = r > g && r > b;
-  const isCold = b > r && b > g;
-  const isNeutral = !isWarm && !isCold;
-
-  if (isWarm) {
-    if (r > 200) return '🔥'; // Very intense red
-    if (r > 150) return '☀️'; // Orange/Red
-    return '🌅'; // Soft warm tones
-  }
-
-  if (isCold) {
-    if (b > 200) return '❄️'; // Very intense blue
-    if (b > 150) return '🌊'; // Medium blue
-    return '🌌'; // Soft cold tones
-  }
-
-  if (isNeutral) {
-    if (g > 150) return '🌱'; // Green
-    if (r > 150 && g > 150) return '🌻'; // Yellow
-    return '✨'; // Other colors
-  }
-
-  return '🎨'; // Default color
-};
+import { useRelaxMode } from './hooks/useRelaxMode';
 
 export default function HomeScreen() {
   const { backgroundColor, currentEmoji, changeColor } = useColorManager();
@@ -46,10 +20,20 @@ export default function HomeScreen() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
+  const { isActive, progress, toggleRelaxMode, resetTimer } =
+    useRelaxMode(handleColorChange);
+
+  const handleBackgroundPress = async () => {
+    await handleColorChange();
+    if (isActive) {
+      resetTimer();
+    }
+  };
+
   return (
     <Pressable
       style={[styles.container, { backgroundColor }]}
-      onPress={handleColorChange}
+      onPress={handleBackgroundPress}
     >
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.content}>
@@ -60,6 +44,13 @@ export default function HomeScreen() {
             onCopy={() => copyToClipboard(backgroundColor)}
           />
         </View>
+
+        <View style={styles.bottomContainer}>
+          <RelaxModeSwitch isActive={isActive} onToggle={toggleRelaxMode} />
+
+          {isActive && <ProgressBar progress={progress} />}
+        </View>
+
         <Toast />
       </SafeAreaView>
     </Pressable>
@@ -86,5 +77,13 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '600',
     color: '#000',
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    gap: 10,
   },
 });

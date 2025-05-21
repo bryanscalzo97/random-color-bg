@@ -11,7 +11,7 @@ export const useClipboard = () => {
         type: 'success',
         text1: 'Color copied',
         text2: text,
-        position: 'bottom',
+        position: 'top',
         visibilityTime: 2000,
       });
     } catch (error) {
@@ -19,7 +19,7 @@ export const useClipboard = () => {
       Toast.show({
         type: 'error',
         text1: 'Error copying color',
-        position: 'bottom',
+        position: 'top',
         visibilityTime: 2000,
       });
     }
