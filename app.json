@@ -11,9 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ],
+        "UIBackgroundModes": ["audio"],
         "NSMicrophoneUsageDescription": "This app needs access to audio playback"
       }
     },
@@ -23,10 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "permissions": [
-        "VIBRATE",
-        "MODIFY_AUDIO_SETTINGS"
-      ]
+      "permissions": ["VIBRATE", "MODIFY_AUDIO_SETTINGS"]
     },
     "web": {
       "bundler": "metro",

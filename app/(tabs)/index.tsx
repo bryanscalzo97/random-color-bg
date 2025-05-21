@@ -3,10 +3,10 @@ import * as Haptics from 'expo-haptics';
 import { useEffect, useState } from 'react';
 import {
   Animated,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -146,13 +146,13 @@ export default function HomeScreen() {
             },
           ]}
         >
-          <TouchableOpacity
+          <Pressable
+            android_disableSound
             style={styles.button}
             onPress={handleColorChange}
-            activeOpacity={0.7}
           >
             <Text style={styles.buttonText}>Change Color</Text>
-          </TouchableOpacity>
+          </Pressable>
         </Animated.View>
       </View>
     </SafeAreaView>
