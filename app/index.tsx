@@ -8,6 +8,7 @@ import { useAudio } from './hooks/useAudio';
 import { useClipboard } from './hooks/useClipboard';
 import { useColorManager } from './hooks/useColorManager';
 import { useRelaxMode } from './hooks/useRelaxMode';
+import { isDarkColor } from './utils/colorUtils';
 
 export default function HomeScreen() {
   const { backgroundColor, currentEmoji, changeColor } = useColorManager();
@@ -30,6 +31,12 @@ export default function HomeScreen() {
     }
   };
 
+  const textColor = isDarkColor(backgroundColor) ? '#FFFFFF' : '#000000';
+  const softTextColor =
+    textColor === '#FFFFFF'
+      ? 'rgba(255, 255, 255, 0.85)'
+      : 'rgba(0, 0, 0, 0.85)';
+
   return (
     <Pressable
       style={[styles.container, { backgroundColor }]}
@@ -38,17 +45,26 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.content}>
           <Text style={styles.emoji}>{currentEmoji}</Text>
-          <Text style={styles.helloText}>Hello there</Text>
+          <Text style={[styles.helloText, { color: softTextColor }]}>
+            Hello there
+          </Text>
           <ColorDisplay
             backgroundColor={backgroundColor}
             onCopy={() => copyToClipboard(backgroundColor)}
+            textColor={textColor}
           />
         </View>
 
         <View style={styles.bottomContainer}>
-          <RelaxModeSwitch isActive={isActive} onToggle={toggleRelaxMode} />
+          <RelaxModeSwitch
+            isActive={isActive}
+            onToggle={toggleRelaxMode}
+            textColor={textColor}
+          />
 
-          {isActive && <ProgressBar progress={progress} />}
+          {isActive && (
+            <ProgressBar progress={progress} textColor={textColor} />
+          )}
         </View>
 
         <Toast />
@@ -76,7 +92,6 @@ const styles = StyleSheet.create({
   helloText: {
     fontSize: 32,
     fontWeight: '600',
-    color: '#000',
   },
   bottomContainer: {
     position: 'absolute',

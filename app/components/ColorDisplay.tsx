@@ -4,15 +4,19 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 interface ColorDisplayProps {
   backgroundColor: string;
   onCopy: () => void;
+  textColor: string;
 }
 
-export const ColorDisplay = ({
+export function ColorDisplay({
   backgroundColor,
   onCopy,
-}: ColorDisplayProps) => {
+  textColor,
+}: ColorDisplayProps) {
   return (
     <View style={styles.colorContainer}>
-      <Text style={styles.colorText}>{backgroundColor}</Text>
+      <Text style={[styles.colorText, { color: textColor }]}>
+        {backgroundColor}
+      </Text>
       <Pressable
         style={({ pressed }) => [
           styles.copyButton,
@@ -21,11 +25,11 @@ export const ColorDisplay = ({
         onPress={onCopy}
         android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
       >
-        <MaterialIcons name='content-copy' size={24} color='#000' />
+        <MaterialIcons name='content-copy' size={24} color={textColor} />
       </Pressable>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   colorContainer: {
@@ -41,7 +45,6 @@ const styles = StyleSheet.create({
   colorText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#000',
   },
   copyButton: {
     padding: 4,

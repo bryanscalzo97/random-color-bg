@@ -23,3 +23,14 @@ export const getColorEmoji = (r: number, g: number, b: number): string => {
 
   return '🎨'; // Default color
 };
+
+export const isDarkColor = (color: string) => {
+  // Extract RGB values from rgba string
+  const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (!match) return false;
+
+  const [, r, g, b] = match.map(Number);
+  // Calculate brightness using YIQ formula
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness < 128;
+};
