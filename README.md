@@ -58,7 +58,7 @@ app/
 1. Clone the repository:
 
 ```bash
-git clone [https://github.com/bryanscalzo97/random-color-bg.git]
+git clone https://github.com/bryanscalzo97/random-color-bg.git
 cd random-color-bg
 ```
 
