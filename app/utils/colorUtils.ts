@@ -24,13 +24,21 @@ export const getColorEmoji = (r: number, g: number, b: number): string => {
   return '🎨'; // Default color
 };
 
+// Export a function named 'isDarkColor' that determines if a color is dark based on its RGB or RGBA string representation
 export const isDarkColor = (color: string) => {
-  // Extract RGB values from rgba string
+  // Use a regular expression to extract the RGB values from an 'rgba' or 'rgb' formatted string
   const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+
+  // If the color string doesn't match the expected format, return false as we cannot determine the darkness
   if (!match) return false;
 
+  // Destructure and convert the matched RGB values from strings to numbers
   const [, r, g, b] = match.map(Number);
-  // Calculate brightness using YIQ formula
+
+  // Calculate the brightness of the color using the YIQ formula
+  // This formula gives more weight to green, then red, and less to blue as they contribute differently to perceived brightness
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+  // Return true if brightness is less than 128, indicating a dark color; otherwise, return false
   return brightness < 128;
 };
