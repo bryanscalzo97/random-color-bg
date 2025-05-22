@@ -26,19 +26,25 @@ export const getColorEmoji = (r: number, g: number, b: number): string => {
 
 // Export a function named 'isDarkColor' that determines if a color is dark based on its RGB or RGBA string representation
 export const isDarkColor = (color: string) => {
-  // Use a regular expression to extract the RGB values from an 'rgba' or 'rgb' formatted string
+  // Extract RGB values from rgba string using regex
+  // Matches both rgb() and rgba() formats
   const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-
-  // If the color string doesn't match the expected format, return false as we cannot determine the darkness
   if (!match) return false;
 
-  // Destructure and convert the matched RGB values from strings to numbers
+  // Convert string values to numbers and destructure RGB components
   const [, r, g, b] = match.map(Number);
 
-  // Calculate the brightness of the color using the YIQ formula
-  // This formula gives more weight to green, then red, and less to blue as they contribute differently to perceived brightness
+  // Calculate perceived brightness using YIQ formula
+  // This formula gives more weight to green and less to blue
+  // as human eyes are more sensitive to green light
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
-  // Return true if brightness is less than 128, indicating a dark color; otherwise, return false
+  // Return true if the color is dark (brightness < 128)
   return brightness < 128;
+};
+
+export const getTextColor = (backgroundColor: string, opacity: number = 1) => {
+  const isDark = isDarkColor(backgroundColor);
+  const color = isDark ? '255, 255, 255' : '0, 0, 0';
+  return `rgba(${color}, ${opacity})`;
 };

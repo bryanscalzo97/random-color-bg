@@ -1,16 +1,13 @@
 import { StyleSheet, View } from 'react-native';
+import { getTextColor } from '../utils/colorUtils';
 
 interface ProgressBarProps {
   progress: number;
-  textColor: string;
+  backgroundColor: string;
 }
 
-export function ProgressBar({ progress, textColor }: ProgressBarProps) {
-  // Add 85% opacity to the text color
-  const progressColor =
-    textColor === '#FFFFFF'
-      ? 'rgba(255, 255, 255, 0.85)'
-      : 'rgba(0, 0, 0, 0.85)';
+export function ProgressBar({ progress, backgroundColor }: ProgressBarProps) {
+  const progressColor = getTextColor(backgroundColor, 0.85);
 
   return (
     <View style={styles.progressContainer}>

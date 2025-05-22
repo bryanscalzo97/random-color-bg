@@ -1,5 +1,5 @@
-import { Audio } from 'expo-av';
-import { useEffect, useState } from 'react';
+import { Audio, AVPlaybackStatus } from 'expo-av';
+import { useCallback, useEffect, useState } from 'react';
 
 export const useAudio = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
@@ -33,32 +33,39 @@ export const useAudio = () => {
   }, [sound]);
 
   // Function to handle playing the sound
-  const playSound = async () => {
-    try {
-      // If there's an existing sound, unload it before playing a new one
-      if (sound) {
-        await sound.unloadAsync();
+  const playSound = useCallback(
+    async (type: 'warm' | 'cold' | 'neutral') => {
+      try {
+        // Stop and unload current sound if it exists
+        if (sound) {
+          await sound.stopAsync();
+          await sound.unloadAsync();
+        }
+
+        const soundFile = {
+          warm: require('../../assets/isWarm.wav'),
+          cold: require('../../assets/isCold.wav'),
+          neutral: require('../../assets/isNeutral.wav'),
+        }[type];
+
+        const { sound: newSound } = await Audio.Sound.createAsync(soundFile);
+        setSound(newSound); // Store the new sound instance
+        await newSound.playAsync();
+
+        // Clean up the sound after it finishes playing
+        newSound.setOnPlaybackStatusUpdate(async (status: AVPlaybackStatus) => {
+          if (!status.isLoaded) return;
+          if (status.didJustFinish) {
+            await newSound.unloadAsync();
+            setSound(null); // Clear the sound reference
+          }
+        });
+      } catch (error) {
+        console.error('Error playing sound:', error);
       }
-
-      // Load the sound file. Make sure the file path is correct and accessible.
-      const soundFile = require('../../assets/pop.wav');
-      if (!soundFile) {
-        console.error('Sound file not found');
-        return;
-      }
-
-      // Create a new sound instance and automatically start playing the sound
-      const { sound: newSound } = await Audio.Sound.createAsync(soundFile, {
-        shouldPlay: true, // Start playing immediately
-        volume: 1.0, // Set the initial volume to maximum
-      });
-
-      setSound(newSound); // Store the new sound in the state
-      await newSound.playAsync(); // Ensure the sound starts playing
-    } catch (error) {
-      console.error('Error playing sound:', error);
-    }
-  };
+    },
+    [sound]
+  ); // Add sound to dependencies since we're using it in the callback
 
   return { playSound };
 };

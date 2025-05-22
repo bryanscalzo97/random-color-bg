@@ -8,7 +8,7 @@ import { useAudio } from './hooks/useAudio';
 import { useClipboard } from './hooks/useClipboard';
 import { useColorManager } from './hooks/useColorManager';
 import { useRelaxMode } from './hooks/useRelaxMode';
-import { isDarkColor } from './utils/colorUtils';
+import { getTextColor } from './utils/colorUtils';
 
 export default function HomeScreen() {
   const { backgroundColor, currentEmoji, changeColor } = useColorManager();
@@ -16,8 +16,19 @@ export default function HomeScreen() {
   const { copyToClipboard } = useClipboard();
 
   const handleColorChange = async () => {
-    changeColor();
-    await playSound();
+    // Get the new color immediately
+    const newColor = changeColor();
+
+    // Determine the sound based on the new color
+    const match = newColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      const [, r, g, b] = match.map(Number);
+      const isWarm = r > g && r > b;
+      const isCold = b > r && b > g;
+      const type = isWarm ? 'warm' : isCold ? 'cold' : 'neutral';
+      await playSound(type);
+    }
+
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
 
@@ -31,11 +42,8 @@ export default function HomeScreen() {
     }
   };
 
-  const textColor = isDarkColor(backgroundColor) ? '#FFFFFF' : '#000000';
-  const softTextColor =
-    textColor === '#FFFFFF'
-      ? 'rgba(255, 255, 255, 0.85)'
-      : 'rgba(0, 0, 0, 0.85)';
+  const textColor = getTextColor(backgroundColor);
+  const softTextColor = getTextColor(backgroundColor, 0.85);
 
   return (
     <Pressable
@@ -63,7 +71,10 @@ export default function HomeScreen() {
           />
 
           {isActive && (
-            <ProgressBar progress={progress} textColor={textColor} />
+            <ProgressBar
+              progress={progress}
+              backgroundColor={backgroundColor}
+            />
           )}
         </View>
 
