@@ -1,50 +1,103 @@
-# Welcome to your Expo app 👋
+# Random Color Background App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native application that generates random background colors with an enhanced user experience. Built with Expo and React Native.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Random Color Generation**: Tap anywhere on the screen to change the background color
+- **Smart Contrast**: Text and UI elements automatically adjust their color for optimal readability
+- **Relax Mode**: Automatic color changes every 5 seconds with a progress indicator
+- **Color Feedback**:
+  - Visual feedback with emojis that change based on color temperature
+  - Audio feedback with different sounds for warm, cold, and neutral colors
+  - Haptic feedback when changing colors
+- **Color Copy**: Copy the current color to clipboard with a single tap
+- **Responsive Design**: Works on both iOS and Android devices
 
-   ```bash
-   npm install
-   ```
+## Technical Features
 
-2. Start the app
+- Built with React Native and Expo
+- Custom hooks for color management and audio
+- Efficient state management
+- Clean and modular code structure
+- No external color generation libraries
 
-   ```bash
-   npx expo start
-   ```
+## Project Structure
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+app/
+├── components/         # Reusable UI components
+│   ├── ColorDisplay.tsx
+│   ├── ProgressBar.tsx
+│   └── RelaxModeSwitch.tsx
+├── hooks/             # Custom hooks
+│   ├── useAudio.ts
+│   ├── useClipboard.ts
+│   ├── useColorManager.ts
+│   └── useRelaxMode.ts
+├── utils/             # Utility functions
+│   └── colorUtils.ts
+└── index.tsx          # Main application component
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-## Learn more
+### Prerequisites
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for Mac) or Android Emulator
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Installation
 
-## Join the community
+1. Clone the repository:
 
-Join our community of developers creating universal apps.
+```bash
+git clone [https://github.com/bryanscalzo97/random-color-bg.git]
+cd random-color-bg
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Start the development server:
+
+```bash
+npm start
+# or
+yarn start
+```
+
+4. Run on your preferred platform:
+
+- Press `i` for iOS simulator
+- Press `a` for Android emulator
+- Press `w` for Web
+- Scan QR code with Expo Go app for physical device
+
+## Usage
+
+- **Change Color**: Tap anywhere on the screen
+- **Toggle Relax Mode**: Use the switch at the bottom of the screen
+- **Copy Color**: Tap the color display at the bottom
+- **Progress Bar**: Shows time remaining in relax mode
+
+## Color Types
+
+The app categorizes colors into three types:
+
+- **Warm**: Red and orange tones
+- **Cold**: Blue tones
+- **Neutral**: Green, yellow, and other tones
+
+Each type has its own:
+
+- Emoji indicator
+- Sound effect
+- Visual feedback
