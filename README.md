@@ -12,7 +12,11 @@ A React Native application that generates random background colors with an enhan
   - Audio feedback with different sounds for warm, cold, and neutral colors
   - Haptic feedback when changing colors
 - **Color Copy**: Copy the current color to clipboard with a single tap
-- **Responsive Design**: Works on both iOS and Android devices
+- **Responsive Design**: Works on iOS, Android and Web
+
+## Web Version
+
+The application is deployed and available for testing at [https://random-color-a1wxtecjo-bryanscalzo97s-projects.vercel.app](https://random-color-a1wxtecjo-bryanscalzo97s-projects.vercel.app). Simply log in to access the web version and test all features directly in your browser.
 
 ## Technical Features
 
