@@ -2,6 +2,10 @@
 
 A React Native application that generates random background colors with an enhanced user experience. Built with Expo and React Native.
 
+## Demo
+
+https://github.com/user-attachments/assets/359b82ed-22e4-4537-8701-de3bd460d546
+
 ## Features
 
 - **Random Color Generation**: Tap anywhere on the screen to change the background color
